@@ -26,15 +26,6 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: branch
-    attributes:
-      label: '🌳 브랜치명 (Branch)'
-      description: '영어로 브랜치명을 작성해주세요 (예: feature/CUL-00-login-page)'
-      placeholder: 'feature/CUL-00-login-page'
-    validations:
-      required: true
-
   - type: textarea
     id: description
     attributes:
@@ -79,3 +70,7 @@ body:
     validations:
       required: true
 
+  - type: markdown
+    attributes:
+      value: |
+        ℹ️ 브랜치명은 Jira 이슈 생성 후 자동으로 `feature/이슈번호-이슈제목` 형식으로 생성됩니다.
