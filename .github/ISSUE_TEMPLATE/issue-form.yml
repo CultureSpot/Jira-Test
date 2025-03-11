@@ -19,10 +19,10 @@ body:
       label: '📌 이슈 타입 (Issue Type)'
       description: 'Jira에 생성할 이슈의 타입을 선택해주세요'
       options:
-        - Task
-        - Bug
-        - Story
-        - Subtask
+        - 'Task'
+        - 'Bug'
+        - 'Story'
+        - 'Subtask'
     validations:
       required: true
 
@@ -60,8 +60,8 @@ body:
       label: '🌿 브랜치 생성 여부'
       description: '이 이슈에 대해 브랜치를 생성할지 선택해주세요'
       options:
-        - Yes
-        - No
+        - 'Yes'
+        - 'No'
     validations:
       required: true
 
@@ -71,11 +71,11 @@ body:
       label: '🏷️ 라벨 (Label)'
       description: '이슈 성격에 맞는 라벨을 선택해주세요'
       options:
-        - feat
-        - fix
-        - chore
-        - refactor
-        - docs
+        - 'feat'
+        - 'fix'
+        - 'chore'
+        - 'refactor'
+        - 'docs'
     validations:
       required: true
 
