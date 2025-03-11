@@ -33,7 +33,6 @@ jobs:
         run: |
           echo 'Parsed parentKey: ${{ steps.issue-parser.outputs.issueparser_parentKey }}'
           echo 'Parsed issuetype: ${{ steps.issue-parser.outputs.issueparser_issuetype }}'
-          echo 'Parsed branch: ${{ steps.issue-parser.outputs.issueparser_branch }}'
           echo 'Create branch? ${{ steps.issue-parser.outputs.issueparser_createBranch }}'
           echo 'Parsed JSON: ${{ steps.issue-parser.outputs.jsonString }}'
 
@@ -75,7 +74,9 @@ jobs:
       - name: Create branch with Ticket number
         if: ${{ steps.issue-parser.outputs.issueparser_createBranch == 'Yes' }}
         run: |
-          BRANCH_NAME="${{ steps.issue-parser.outputs.issueparser_branch }}"
+          ISSUE_NUMBER="${{ steps.create.outputs.issue }}"  # 예: CUL-123
+          TITLE_SLUG=$(echo "${{ github.event.issue.title }}" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g' | sed 's/[^a-z0-9\-]//g')
+          BRANCH_NAME="feature/${ISSUE_NUMBER}-${TITLE_SLUG}"
           git checkout -b "${BRANCH_NAME}"
           git push origin "${BRANCH_NAME}"
 
