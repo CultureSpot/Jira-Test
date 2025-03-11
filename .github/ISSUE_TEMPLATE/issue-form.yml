@@ -2,6 +2,7 @@ name: '이슈 생성'
 description: 'Repo에 이슈를 생성하며, 생성된 이슈는 Jira와 연동됩니다.'
 labels: []
 title: 'CUL-이슈번호: 이슈 이름을 작성해주세요'
+
 body:
   - type: input
     id: parentKey
@@ -12,12 +13,16 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: branch
+  - type: dropdown
+    id: issuetype
     attributes:
-      label: '🌳 브랜치명 (Branch)'
-      description: '영어로 브랜치명을 작성해주세요 (예: feature/CUL-00-description)'
-      placeholder: 'feature/CUL-00-description'
+      label: '📌 이슈 타입 (Issue Type)'
+      description: 'Jira에 생성할 이슈의 타입을 선택해주세요'
+      options:
+        - 'Task'
+        - 'Bug'
+        - 'Story'
+        - 'Subtask'
     validations:
       required: true
 
@@ -26,7 +31,6 @@ body:
     attributes:
       label: '📝 상세 내용 (Description)'
       description: '이슈에 대해서 간략히 설명해주세요'
-      placeholder: '이슈에 대한 상세 내용을 입력해주세요'
     validations:
       required: true
 
@@ -42,15 +46,31 @@ body:
       required: true
 
   - type: dropdown
+    id: createBranch
+    attributes:
+      label: '🌿 브랜치 생성 여부'
+      description: '이 이슈에 대해 브랜치를 생성할지 선택해주세요'
+      options:
+        - 'Yes'
+        - 'No'
+    validations:
+      required: true
+
+  - type: dropdown
     id: label
     attributes:
       label: '🏷️ 라벨 (Label)'
       description: '이슈 성격에 맞는 라벨을 선택해주세요'
       options:
-        - feat
-        - fix
-        - chore
-        - refactor
-        - docs
+        - 'feat'
+        - 'fix'
+        - 'chore'
+        - 'refactor'
+        - 'docs'
     validations:
       required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ℹ️ 브랜치명은 Jira 이슈 생성 후 자동으로 `feature/이슈번호-이슈제목` 형식으로 생성됩니다.
