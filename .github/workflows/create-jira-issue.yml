@@ -78,7 +78,6 @@ jobs:
         if: ${{ steps.issue-parser.outputs.issueparser_createBranch == 'Yes' }}
         run: |
           ISSUE_NUMBER="${{ steps.create.outputs.issue }}"  # 예: CUL-123
-          TITLE_SLUG=$(echo "${{ github.event.issue.title }}" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g' | sed 's/[^a-z0-9\-]//g')
           BRANCH_NAME="${{ steps.issue-parser.outputs.branchName }}-${ISSUE_NUMBER}"  # 사용자가 입력한 브랜치 이름 + 이슈 키
           git checkout -b "${BRANCH_NAME}"
           git push origin "${BRANCH_NAME}"
@@ -97,4 +96,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           body: 'Jira Issue Created: [${{ steps.create.outputs.issue }}](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})'
-
