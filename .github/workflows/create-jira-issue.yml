@@ -79,7 +79,7 @@ jobs:
         if: ${{ steps.issue-parser.outputs.issueparser_createBranch == 'Yes' }}
         run: |
           ISSUE_NUMBER="${{ steps.create.outputs.issue }}"  # 예: CUL-123
-          BRANCH_NAME="${{ steps.issue-parser.outputs.branchName }}-${ISSUE_NUMBER}"  # 사용자가 입력한 브랜치 이름 + 이슈 키
+          BRANCH_NAME="${{ steps.issue-parser.outputs.issueparser_branchName }}-${ISSUE_NUMBER}"  # 사용자가 입력한 브랜치 이름 + 이슈 키
           echo "Generated branch name: ${BRANCH_NAME}"  # 디버깅 출력
           git checkout -b "${BRANCH_NAME}"
           git push origin "${BRANCH_NAME}"
