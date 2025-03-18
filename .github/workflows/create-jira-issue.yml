@@ -33,12 +33,13 @@ jobs:
         with:
           template-path: .github/ISSUE_TEMPLATE/issue-form.yml
 
-      - name: Log Issue Parser
+      - name: Log Issue Parser  # 디버깅용 로그 추가
         run: |
-          echo 'Parsed parentKey: ${{ steps.issue-parser.outputs.issueparser_parentKey }}'
-          echo 'Parsed issuetype: ${{ steps.issue-parser.outputs.issueparser_issuetype }}'
-          echo 'Create branch? ${{ steps.issue-parser.outputs.issueparser_createBranch }}'
-          echo 'Parsed JSON: ${{ steps.issue-parser.outputs.jsonString }}'
+          echo "Parsed parentKey: ${{ steps.issue-parser.outputs.issueparser_parentKey }}"
+          echo "Parsed issuetype: ${{ steps.issue-parser.outputs.issueparser_issuetype }}"
+          echo "Create branch? ${{ steps.issue-parser.outputs.issueparser_createBranch }}"
+          echo "Parsed JSON: ${{ steps.issue-parser.outputs.jsonString }}"
+          echo "Branch Name from form: ${{ steps.issue-parser.outputs.branchName }}"  # 디버깅용 출력 추가
 
       - name: Convert markdown to Jira Syntax
         uses: peter-evans/jira2md@v1
@@ -79,6 +80,7 @@ jobs:
         run: |
           ISSUE_NUMBER="${{ steps.create.outputs.issue }}"  # 예: CUL-123
           BRANCH_NAME="${{ steps.issue-parser.outputs.branchName }}-${ISSUE_NUMBER}"  # 사용자가 입력한 브랜치 이름 + 이슈 키
+          echo "Generated branch name: ${BRANCH_NAME}"  # 디버깅 출력
           git checkout -b "${BRANCH_NAME}"
           git push origin "${BRANCH_NAME}"
 
@@ -96,3 +98,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           body: 'Jira Issue Created: [${{ steps.create.outputs.issue }}](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})'
+
