@@ -9,6 +9,10 @@ jobs:
   create-issue:
     name: Create Jira issue
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 코드에 대한 쓰기 권한
+      issues: write    # 이슈에 대한 쓰기 권한
+      pull-requests: write  # PR 관련 권한
 
     steps:
       - name: Login
@@ -43,7 +47,6 @@ jobs:
           input-text: |
             ### Github Issue Link
             - ${{ github.event.issue.html_url }}
-
             ${{ github.event.issue.body }}
           mode: md2jira
 
@@ -76,7 +79,7 @@ jobs:
         run: |
           ISSUE_NUMBER="${{ steps.create.outputs.issue }}"  # 예: CUL-123
           TITLE_SLUG=$(echo "${{ github.event.issue.title }}" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g' | sed 's/[^a-z0-9\-]//g')
-          BRANCH_NAME="feature/${ISSUE_NUMBER}-${TITLE_SLUG}"
+          BRANCH_NAME="${{ steps.issue-parser.outputs.branchName }}-${ISSUE_NUMBER}"  # 사용자가 입력한 브랜치 이름 + 이슈 키
           git checkout -b "${BRANCH_NAME}"
           git push origin "${BRANCH_NAME}"
 
@@ -94,3 +97,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           body: 'Jira Issue Created: [${{ steps.create.outputs.issue }}](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})'
+
