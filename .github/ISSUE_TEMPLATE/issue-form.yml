@@ -13,6 +13,15 @@ body:
     validations:
       required: true
 
+  - type: input
+    id: branchName  # branchName 필드를 추가
+    attributes:
+      label: '🌿 브랜치 이름'
+      description: '브랜치 이름을 기입해주세요 (예: feat/login)'
+      placeholder: 'feat/login'
+    validations:
+      required: true
+
   - type: dropdown
     id: issuetype
     attributes:
@@ -74,3 +83,4 @@ body:
     attributes:
       value: |
         ℹ️ 브랜치명은 Jira 이슈 생성 후 자동으로 `feature/이슈번호-이슈제목` 형식으로 생성됩니다.
+
