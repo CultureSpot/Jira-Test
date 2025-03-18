@@ -1,7 +1,7 @@
 name: '이슈 생성'
 description: 'Repo에 이슈를 생성하며, 생성된 이슈는 Jira와 연동됩니다.'
 labels: []
-title: '이슈 이름을 작성해주세요'
+title: 'CUL-이슈번호: 이슈 이름을 작성해주세요'
 
 body:
   - type: input
@@ -14,7 +14,7 @@ body:
       required: true
 
   - type: input
-    id: branchName
+    id: branchName  # branchName 필드를 추가
     attributes:
       label: '🌿 브랜치 이름'
       description: '브랜치 이름을 기입해주세요 (예: feat/login)'
