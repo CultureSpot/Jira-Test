@@ -1,76 +1,39 @@
-name: '이슈 생성'
-description: 'Repo에 이슈를 생성하며, 생성된 이슈는 Jira와 연동됩니다.'
-labels: []
-title: 'CUL-이슈번호: 이슈 이름을 작성해주세요'
+name: Create Jira issue
 
-body:
-  - type: input
-    id: parentKey
-    attributes:
-      label: '🎟️ 상위 작업 (Ticket Number)'
-      description: '상위 작업의 Ticket Number를 기입해주세요 (예: CUL-00)'
-      placeholder: 'CUL-00'
-    validations:
-      required: true
+on:
+  issues:
+    types:
+      - opened
 
-  - type: dropdown
-    id: issuetype
-    attributes:
-      label: '📌 이슈 타입 (Issue Type)'
-      description: 'Jira에 생성할 이슈의 타입을 선택해주세요'
-      options:
-        - 'Task'
-        - 'Bug'
-        - 'Story'
-        - 'Subtask'
-    validations:
-      required: true
+jobs:
+  create-issue:
+    name: Create Jira issue
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 코드에 대한 쓰기 권한
+      issues: write    # 이슈에 대한 쓰기 권한
+      pull-requests: write  # PR 관련 권한
 
-  - type: textarea
-    id: description
-    attributes:
-      label: '📝 상세 내용 (Description)'
-      description: '이슈에 대해서 간략히 설명해주세요'
-    validations:
-      required: true
+    steps:
+      - name: Login
+        uses: atlassian/gajira-login@v3
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
 
-  - type: textarea
-    id: tasks
-    attributes:
-      label: '✅ 체크리스트 (Tasks)'
-      description: '해당 이슈에 대해 필요한 작업 목록을 작성해주세요'
-      value: |
-        - [ ] Task1
-        - [ ] Task2
-    validations:
-      required: true
+      - name: Checkout main code
+        uses: actions/checkout@v4
+        with:
+          ref: main
 
-  - type: dropdown
-    id: createBranch
-    attributes:
-      label: '🌿 브랜치 생성 여부'
-      description: '이 이슈에 대해 브랜치를 생성할지 선택해주세요'
-      options:
-        - 'Yes'
-        - 'No'
-    validations:
-      required: true
+      - name: Issue Parser
+        uses: stefanbuck/github-issue-praser@v3
+        id: issue-parser
+        with:
+          template-path: .github/ISSUE_TEMPLATE/issue-form.yml
 
-  - type: dropdown
-    id: label
-    attributes:
-      label: '🏷️ 라벨 (Label)'
-      description: '이슈 성격에 맞는 라벨을 선택해주세요'
-      options:
-        - 'feat'
-        - 'fix'
-        - 'chore'
-        - 'refactor'
-        - 'docs'
-    validations:
-      required: true
-
-  - type: markdown
-    attributes:
-      value: |
-        ℹ️ 브랜치명은 Jira 이슈 생성 후 자동으로 `feature/이슈번호-이슈제목` 형식으로 생성됩니다.
+      - name: Log Issue Parser
+        run: |
+          echo 'Parsed parentKey: ${{ steps.issue-parser.outputs.issueparser_parentKey }}'
+          echo 'Parsed issuetype: ${{ steps.issue-parser.outputs.issueparser_
